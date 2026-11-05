@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Know Your Loan</title>
+  <meta name="description" content="See what a loan really costs. Free, works without internet, no sign-up.">
+  <meta name="theme-color" content="#0f5c5a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- Icon set: plain strokes, one picture per idea -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v4c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M3 11v4c0 1.7 2.7 3 6 3 1 0 2-.1 2.800-.4"/><path d="M15 12c3.300 0 6 1.300 6 3v3c0 1.700-2.700 3-6 3s-6-1.300-6-3v-3c0-1.700 2.700-3 6-3z"/></symbol>
+    <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.500 7.500 21 19M8.500 16.500 21 5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h.01M12 19h.01M16 19h.01"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 22 20H2z"/><path d="M12 10v4.500M12 17.500h.01"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><rect x="7" y="14" width="10" height="7"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="brand">
+    <img src="assets/icon.svg" alt="" width="34" height="34">
+    <h1 data-i18n="appName">Know Your Loan</h1>
+  </div>
+  <label class="lang">
+    <span class="sr" data-i18n="language">Language</span>
+    <select id="lang"></select>
+  </label>
+</header>
+
+<main>
+  <!-- CALCULATE -->
+  <section id="tab-calc" class="tab" aria-labelledby="calc-title">
+    <h2 id="calc-title" data-i18n="calcTitle"></h2>
+    <p class="lead" data-i18n="calcLead"></p>
+
+    <form id="loan-form" novalidate autocomplete="off">
+      <div class="field">
+        <label for="amount"><svg class="ico"><use href="#i-coins"/></svg><span data-i18n="fAmount"></span></label>
+        <p class="hint" data-i18n="hAmount"></p>
+        <input id="amount" inputmode="decimal" placeholder="1000">
+      </div>
+
+      <div class="field">
+        <label for="fees"><svg class="ico"><use href="#i-scissors"/></svg><span data-i18n="fFees"></span></label>
+        <p class="hint" data-i18n="hFees"></p>
+        <input id="fees" inputmode="decimal" placeholder="0">
+      </div>
+
+      <div class="field">
+        <label for="count"><svg class="ico"><use href="#i-calendar"/></svg><span data-i18n="fCount"></span></label>
+        <p class="hint" data-i18n="hCount"></p>
+        <input id="count" inputmode="numeric" placeholder="10">
+      </div>
+
+      <div class="field">
+        <label for="installment"><svg class="ico"><use href="#i-note"/></svg><span data-i18n="fInstallment"></span></label>
+        <p class="hint" data-i18n="hInstallment"></p>
+        <input id="installment" inputmode="decimal" placeholder="130">
+      </div>
+
+      <div class="field">
+        <label for="periodLength"><svg class="ico"><use href="#i-clock"/></svg><span id="schedule-label"></span></label>
+        <p class="hint" id="schedule-hint"></p>
+        <div class="schedule">
+          <span id="schedule-prefix"></span>
+          <input id="periodLength" inputmode="decimal" value="1" aria-describedby="schedule-hint">
+          <select id="periodUnit" aria-label="unit">
+            <option value="day"></option>
+            <option value="week"></option>
+            <option value="month" selected></option>
+          </select>
+        </div>
+      </div>
+
+      <details class="more">
+        <summary data-i18n="moreOptions"></summary>
+        <div class="field">
+          <label for="later"><span data-i18n="fLater"></span></label>
+          <p class="hint" data-i18n="hLater"></p>
+          <input id="later" inputmode="decimal" placeholder="0">
+        </div>
+        <div class="field">
+          <label for="quoted"><span data-i18n="fQuoted"></span></label>
+          <p class="hint" data-i18n="hQuoted"></p>
+          <input id="quoted" inputmode="decimal" placeholder="10">
+        </div>
+        <div class="field">
+          <label for="money"><span data-i18n="fMoney"></span></label>
+          <p class="hint" data-i18n="hMoney"></p>
+          <input id="money" maxlength="12" placeholder="USD">
+        </div>
+      </details>
+    </form>
+
+    <section id="result" class="result" aria-live="polite"></section>
+
+    <section id="save-area" class="save" hidden>
+      <h3 data-i18n="saveTitle"></h3>
+      <div class="save-row">
+        <input id="save-name" maxlength="40" data-i18n-placeholder="saveName" aria-label="">
+        <button type="button" id="save-btn" class="btn" data-i18n="saveBtn"></button>
+      </div>
+    </section>
+
+    <section id="saved" class="saved" hidden>
+      <h3 data-i18n="savedTitle"></h3>
+      <p class="hint" data-i18n="savedHint"></p>
+      <ul id="saved-list"></ul>
+    </section>
+
+    <p class="fine" data-i18n="disclaimer"></p>
+  </section>
+
+  <!-- WARNING SIGNS -->
+  <section id="tab-signs" class="tab" aria-labelledby="signs-title" hidden>
+    <h2 id="signs-title" data-i18n="signsTitle"></h2>
+    <p class="lead" data-i18n="signsLead"></p>
+    <ul id="signs-list" class="signs"></ul>
+    <p id="signs-summary" class="signs-summary" aria-live="polite"></p>
+    <p id="signs-advice" class="advice"></p>
+    <button type="button" id="signs-clear" class="btn-quiet" data-i18n="signsClear"></button>
+  </section>
+
+  <!-- PAPER WORKSHEET -->
+  <section id="tab-sheet" class="tab" aria-labelledby="sheet-title" hidden>
+    <div class="sheet-actions">
+      <button type="button" id="print-btn" class="btn"><svg class="ico"><use href="#i-print"/></svg><span data-i18n="sheetPrint"></span></button>
+    </div>
+    <div id="sheet" class="sheet"></div>
+  </section>
+</main>
+
+<nav class="tabbar" aria-label="Main">
+  <a href="#calc" id="nav-calc" data-tab="calc"><svg class="ico"><use href="#i-calc"/></svg><span data-i18n="tabCalc"></span></a>
+  <a href="#signs" id="nav-signs" data-tab="signs"><svg class="ico"><use href="#i-warn"/></svg><span data-i18n="tabSigns"></span></a>
+  <a href="#sheet" id="nav-sheet" data-tab="sheet"><svg class="ico"><use href="#i-print"/></svg><span data-i18n="tabSheet"></span></a>
+</nav>
+
+<noscript><p style="padding:16px">This app needs JavaScript. Open it in a current browser.</p></noscript>
+
+<script src="locales/en.js"></script>
+<script src="locales/es.js"></script>
+<script src="locales/fr.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

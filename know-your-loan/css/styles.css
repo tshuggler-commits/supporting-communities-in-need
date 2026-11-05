@@ -1,0 +1,172 @@
+/* Know Your Loan. Plain CSS, system fonts, no downloads. */
+:root {
+  --bg: #fbf7ee;
+  --paper: #ffffff;
+  --ink: #1d2b2a;
+  --muted: #55635f;
+  --line: #d9d2c0;
+  --accent: #0f5c5a;
+  --accent-ink: #ffffff;
+  --warn: #b4441f;
+  --gold: #f2b84b;
+  --focus: #0b3f3e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11191a;
+    --paper: #182223;
+    --ink: #eef2ee;
+    --muted: #a4b3ae;
+    --line: #2f3f3e;
+    --accent: #4fb3ad;
+    --accent-ink: #0b1a1a;
+    --warn: #f0875f;
+    --focus: #bfe9e5;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 18px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding-bottom: 84px;
+}
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.top, main { max-width: 560px; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; padding-bottom: 6px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand h1 { font-size: 20px; margin: 0; letter-spacing: 0.1px; }
+.brand img { border-radius: 8px; }
+.lang select {
+  font: inherit; font-size: 16px; color: var(--ink); background: var(--paper);
+  border: 2px solid var(--line); border-radius: 10px; padding: 8px 10px; min-height: 44px;
+}
+
+h2 { font-size: 26px; line-height: 1.2; margin: 18px 0 6px; }
+h3 { font-size: 19px; margin: 28px 0 8px; }
+.lead { color: var(--muted); margin: 0 0 18px; }
+.fine { color: var(--muted); font-size: 14px; margin-top: 32px; border-top: 1px solid var(--line); padding-top: 14px; }
+
+/* Form */
+.field { padding: 14px 0 16px; border-top: 1px solid var(--line); }
+.field:first-child { border-top: 0; }
+.field label { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 18px; }
+.ico { width: 28px; height: 28px; flex: none; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.hint { margin: 2px 0 8px 38px; color: var(--muted); font-size: 15px; }
+input, select { font: inherit; color: var(--ink); }
+.field input {
+  width: 100%; min-height: 54px; font-size: 22px; padding: 8px 14px;
+  background: var(--paper); border: 2px solid var(--line); border-radius: 10px;
+}
+input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--focus); outline-offset: 2px;
+}
+.schedule { display: flex; align-items: center; gap: 10px; }
+.schedule span { font-weight: 600; min-width: 4.5ch; }
+.schedule input { width: 5.5em; flex: none; }
+.schedule select {
+  flex: 1; min-height: 54px; font-size: 20px; padding: 8px 12px;
+  background: var(--paper); border: 2px solid var(--line); border-radius: 10px;
+}
+.more { border-top: 1px solid var(--line); margin-top: 4px; }
+.more summary { cursor: pointer; padding: 14px 0; font-weight: 650; color: var(--accent); }
+.more .field:first-of-type { border-top: 0; }
+
+/* Result */
+.result { margin-top: 18px; border-top: 3px solid var(--accent); padding-top: 14px; }
+.result h3 { margin-top: 0; }
+.big { font-size: 25px; line-height: 1.3; font-weight: 700; margin: 6px 0 18px; }
+.big em { font-style: normal; color: var(--warn); }
+.empty { color: var(--muted); }
+.errors { margin: 0; padding-left: 20px; color: var(--warn); }
+
+.bars { margin: 8px 0 22px; }
+.bar-label { display: flex; justify-content: space-between; font-size: 15px; color: var(--muted); margin-top: 10px; }
+.bar { display: flex; height: 26px; border-radius: 6px; overflow: hidden; background: transparent; }
+.bar .base { background: var(--accent); }
+.bar .extra { background: var(--warn); }
+
+dl.rows { margin: 0; }
+dl.rows > div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 10px 0; border-top: 1px solid var(--line); }
+dl.rows dt { color: var(--muted); font-size: 16px; }
+dl.rows dd { margin: 0; font-weight: 700; font-size: 20px; text-align: right; font-variant-numeric: tabular-nums; }
+dl.rows .key dd { color: var(--warn); font-size: 22px; }
+.note { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+.compare { margin: 14px 0 0; font-weight: 600; }
+.compare.bad { color: var(--warn); }
+.warn { color: var(--warn); font-weight: 600; }
+
+/* Save and compare */
+.save-row { display: flex; gap: 10px; }
+.save-row input { flex: 1; min-width: 0; min-height: 50px; font-size: 18px; padding: 8px 12px; background: var(--paper); border: 2px solid var(--line); border-radius: 10px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 50px; padding: 8px 20px; font: inherit; font-weight: 650;
+  background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; cursor: pointer;
+}
+.btn .ico { stroke: currentColor; width: 24px; height: 24px; }
+.btn-quiet { font: inherit; background: none; border: 0; color: var(--accent); text-decoration: underline; padding: 12px 0; cursor: pointer; min-height: 44px; }
+.saved ul { list-style: none; margin: 0; padding: 0; }
+.saved li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); align-items: center; }
+.saved .name { font-weight: 650; }
+.saved .meta { color: var(--muted); font-size: 15px; }
+.saved .actions { display: flex; gap: 4px; flex: none; }
+.saved .actions button { font: inherit; background: none; border: 0; color: var(--accent); text-decoration: underline; min-height: 44px; padding: 0 8px; cursor: pointer; }
+
+/* Warning signs */
+.signs { list-style: none; margin: 0; padding: 0; }
+.signs li { border-top: 1px solid var(--line); }
+.signs label { display: flex; gap: 14px; padding: 14px 0; align-items: flex-start; cursor: pointer; }
+.signs input { width: 28px; height: 28px; flex: none; margin: 2px 0 0; accent-color: var(--warn); }
+.signs-summary { font-weight: 700; margin: 18px 0 6px; font-size: 20px; }
+.advice { color: var(--muted); margin: 0 0 10px; }
+
+/* Worksheet */
+.sheet-actions { margin: 16px 0; }
+.sheet { background: #fff; color: #111; border: 1px solid var(--line); padding: 18px 16px; }
+.sheet h2 { margin: 0 0 4px; font-size: 24px; }
+.sheet h3 { font-size: 17px; margin: 22px 0 8px; }
+.sheet p { margin: 0 0 10px; }
+.sheet .meta-row { display: flex; gap: 16px; margin: 14px 0; }
+.sheet .meta-row div { flex: 1; border-bottom: 1.5px solid #111; padding-bottom: 2px; font-size: 14px; min-height: 36px; }
+.sheet table { width: 100%; border-collapse: collapse; }
+.sheet td { border: 1.5px solid #111; padding: 10px; vertical-align: middle; font-size: 16px; }
+.sheet td.fill { width: 34%; }
+.sheet .ask { list-style: none; padding: 0; margin: 0; }
+.sheet .ask li { display: flex; gap: 10px; padding: 7px 0; font-size: 16px; }
+.sheet .box { width: 18px; height: 18px; border: 1.5px solid #111; flex: none; margin-top: 3px; }
+.sheet .compare-table th { font-weight: 600; font-size: 14px; border: 1.5px solid #111; padding: 6px; text-align: left; }
+.sheet .compare-table td { height: 44px; }
+.sheet footer { margin-top: 20px; font-size: 13px; color: #444; }
+.sheet .page2 { margin-top: 30px; }
+
+/* Bottom tabs */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; display: flex; background: var(--paper);
+  border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom);
+}
+.tabbar a {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 4px; min-height: 64px; color: var(--muted); text-decoration: none; font-size: 13px; text-align: center; line-height: 1.2;
+}
+.tabbar a[aria-current="page"] { color: var(--accent); font-weight: 700; }
+.tabbar a[aria-current="page"] .ico { stroke: var(--accent); }
+.tabbar .ico { stroke: currentColor; }
+
+[hidden] { display: none !important; }
+
+/* Printing: only the worksheet, black on white */
+@media print {
+  @page { margin: 14mm; }
+  body { background: #fff; padding: 0; font-size: 14px; }
+  .top, .tabbar, .sheet-actions, .tab:not(#tab-sheet), noscript { display: none !important; }
+  #tab-sheet[hidden] { display: block !important; }
+  main { max-width: none; padding: 0; }
+  .sheet { border: 0; padding: 0; }
+  .sheet .page2 { break-before: page; margin-top: 0; }
+  .sheet td { font-size: 14px; padding: 9px; height: 40px; }
+}

@@ -1,0 +1,34 @@
+Required Notice: Copyright (c) 2026 Tanya S. Huggler (https://github.com/tshuggler-commits/supporting-communities-in-need)
+
+KNOW YOUR LOAN: WHICH LICENSE COVERS WHAT
+
+This project is free to use, copy, change, and share for non-commercial
+purposes. It is not for sale. Two licenses apply, one for the code and one for
+the words and pictures.
+
+CODE: PolyForm Noncommercial License 1.0.0 (file: LICENSE)
+  index.html, sw.js, manifest.webmanifest
+  css/
+  js/
+  test/
+
+WORDS AND PICTURES: Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+International (file: LICENSE-CONTENT.txt)
+  locales/ (all translations)
+  docs/
+  assets/
+  README.md
+
+Plain-language summary (the license texts are the legal terms and win if
+anything here differs):
+
+  You may use this for free, including in charities, schools, savings groups,
+  and community programs, and you may translate and adapt it.
+  Keep the license and this notice with any copy you share.
+  Give credit to the author.
+  Changes to the words and pictures must be shared under the same Creative
+  Commons license.
+  You may not sell it or use it to make money without written permission.
+
+Want to use it in a paid program or a commercial product? Ask first:
+tshugglercommunityai@gmail.com
