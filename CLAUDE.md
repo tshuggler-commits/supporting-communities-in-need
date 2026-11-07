@@ -36,7 +36,9 @@ repo and decides everything in it.
   `BUILD-RULES.md` holds the general build rules.
 - **Work lands by pull request, and Tanya merges every one.** Never commit to `main`, and never merge
   a pull request. To bring `main` into a branch, use `git merge`. Never rebase and force-push. Push
-  with the branch named: `git push -u origin <branch>`.
+  with the branch named: `git push -u origin <branch>`. Since 2026-11-06 (ET), a ruleset named
+  "Protect main" requires a pull request into `main`, and no one can bypass it. It also blocks force
+  pushes to `main` and blocks deleting it.
 - **Ask Tanya before anything reaches `main` or changes repo settings.** That holds even when an
   automatic hook says to commit and push.
 - **Tanya is the author of every commit, merges included** (her choice, 2026-11-06 ET). Set it once
@@ -126,6 +128,11 @@ Tanya, 2026-11-06 (ET): *"Make sure it is getting updated as changes are made."*
 
 Newest first. Dates are ET.
 
+- **2026-11-06. A protected branch is not proof of a required check.** After Tanya saved the ruleset
+  for `main`, GitHub listed `main` as protected. The session took that as proof the check was
+  required. The review read the ruleset itself. Its required checks were turned on with an empty
+  list, so a red check still could not block a merge. Read a setting back in full before recording
+  it as done.
 - **2026-11-06. A link in an old commit message meant rebuilding `main`.** At Tanya's word, the link
   to the Claude session came out of the first Know Your Loan commit, and she became its author. Every
   commit on `main` after the first was rebuilt, and `main` was replaced on GitHub. The branch of the
@@ -195,18 +202,16 @@ in the same commit that closes it. Dates are ET.
 1. **The worksheet prints on 3 pages** (found 2026-11-05). Only English on A4 fits on 2. The fix
    belongs in the print styles in `know-your-loan/css/styles.css`. Keep the writing rows at least
    about 9 mm tall. Then change `VERSION` in `sw.js`.
-2. **`know-your-loan/README.md` still shows a draft note and a bracketed placeholder** (2026-11-06),
-   and both are public on `main`. The "Why this exists" paragraph is Tanya's to write.
-3. **Spanish and French need review by a native speaker** (2026-11-06), as
+2. **Spanish and French need review by a native speaker** (2026-11-06), as
    `know-your-loan/docs/TRANSLATING.md` says.
-4. **The bottom bar's padding can be 0 on phones without a notch** (2026-11-06).
+3. **The bottom bar's padding can be 0 on phones without a notch** (2026-11-06).
    `know-your-loan/css/styles.css` line 150 uses `env(safe-area-inset-bottom)` alone.
    `BUILD-RULES.md` asks for `max(8px, env(safe-area-inset-bottom))`. Changing it needs screenshots
    and a new `VERSION`.
-5. **No session has tested the live Pages site** (found 2026-11-04).
-6. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
+4. **No session has tested the live Pages site** (found 2026-11-04).
+5. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
    In Spanish, "1000" received and "100,5" in cost sit beside "1101" paid back. Tanya to decide.
-7. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
+6. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
    rebuilt, the old commits stay readable in these places until GitHub Support removes them:
    - pull requests #1 and #2, including their force-push events
    - the repo's activity log
@@ -214,26 +219,27 @@ in the same commit that closes it. Dates are ET.
 
    The earlier versions of the descriptions of pull requests #1 and #2 also carry the link or an old
    commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
-8. **Make the pull request check required** (2026-11-06). Until Tanya does, a red check warns and
-   does not block a merge. In the repo's settings, open Branches and add a rule for `main` that
-   requires the check.
-9. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
+7. **Add the check to the ruleset on `main`** (2026-11-06). The ruleset "Protect main" has required
+   checks turned on, with an empty list. Until the list names `CLAUDE.md is current`, a red check
+   warns and does not block a merge. In the repo's settings, open "Protect main" under Rules. Under
+   "Require status checks to pass", add `CLAUDE.md is current` and save.
+8. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
    `kyl-browser-test.js`. Add it as `know-your-loan/test/browser.test.js` with what it needs to run
    (Playwright).
-10. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
+9. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
    (2026-11-06). A rule that lives only in a checklist is easy to skip.
-11. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
+10. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
     to decide.
-12. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
+11. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
     `CLAUDE.md` counts as changing it. A pull request runs its own copy of the check and could
     weaken it. Tanya's review guards against that.
-13. **The session hook names files again after `main` is merged into a branch** that has not changed
+12. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-14. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
+13. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
     strict JSON reader would reject it.
-15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+14. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
     (2026-11-06). Tanya said yes on 2026-11-06.
-16. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
+15. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
     expands the middle line of a description passes them, because that line holds no `$(...)`. Put
     a `$(...)` on every line of the test's commands. The real check only passes the description to
     `grep`, so nothing is wrong today.

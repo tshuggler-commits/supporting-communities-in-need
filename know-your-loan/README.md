@@ -2,9 +2,7 @@
 
 A free calculator that shows what a loan really costs. It works without internet, needs no account, and keeps everything on the phone.
 
-> **Draft for the repo owner to rewrite in her own voice.** Replace this paragraph and the one below with your own words.
-
-**Why this exists.** [Two or three sentences about the Nicaragua micro-finance work and what you saw: owners treating money in as money kept, and fees and flat rates hiding the true price of a loan.]
+**Why this exists.** I was part of the team that launched Quinnipiac's micro-finance venture in Nicaragua. Many of the small business owners we worked with treated the money coming in as money in their pocket, when it was revenue that still had to cover expenses. A loan has the same gap between what you see and what it costs. This calculator makes that cost visible before you sign.
 
 ## What it does
 
