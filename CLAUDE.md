@@ -96,6 +96,8 @@ change leaves it no worse. The pull request says so.
 - [ ] `git log --format='%an <%ae>' origin/main..HEAD` shows only Tanya as author.
 - [ ] The pull request names every screen the change touches. It says how each one was checked.
 - [ ] The pull request quotes what the reviewer found.
+- [ ] Once the pull request is open, its description on GitHub holds no link the tool added. On a
+      branch's first push, check this right after opening the pull request.
 - [ ] This file is current (next section).
 
 ## Keep this file current
@@ -124,6 +126,17 @@ Tanya, 2026-11-06 (ET): *"Make sure it is getting updated as changes are made."*
 
 Newest first. Dates are ET.
 
+- **2026-11-06. A link in an old commit message meant rebuilding `main`.** At Tanya's word, the link
+  to the Claude session came out of the first Know Your Loan commit, and she became its author. Every
+  commit on `main` after the first was rebuilt, and `main` was replaced on GitHub. The branch of the
+  open pull request was replaced the same way. Those two pushes were the one exception to the rule
+  against force-pushing. Each rebuilt commit kept its files and the moment it was made. The rebuilt
+  merge commit shows Claude as committer in place of GitHub. Old copies stay readable on GitHub until
+  GitHub Support removes them. Read every commit message before it reaches `main`.
+- **2026-11-06. The tool that opens a pull request can add to its description.** The first pull
+  request's closing line was replaced with a footer that linked back to the Claude session. The
+  session saw it only by reading the description on GitHub. Read the description after opening a
+  pull request, and remove any link the tool added.
 - **2026-11-06. Commit times follow the machine's clock.** The cloud session keeps UTC, so commits
   were stamped +0000 and would show the next day's date every evening. Commit with
   `TZ=America/New_York` set.
@@ -165,9 +178,10 @@ Newest first. Dates are ET.
   `VERSION` in `sw.js` changes. Change it with any change to a file the app loads.
 - **2026-11-04. One placeholder had two wordings.** `NOTICE` and the root README asked for the same
   contact in different words. Search for every form before you commit.
-- **2026-11-04. A commit went straight to `main`, authored as "Claude".** Commit `598b431`
-  (2026-11-04, 9:32 PM ET) followed the first request before this file existed. Branch
-  first, and check the git author before committing.
+- **2026-11-04. A commit went straight to `main`.** The first Know Your Loan commit (2026-11-04,
+  9:32 PM ET) followed the first request before this file existed. It was authored as "Claude", and
+  its message ended with a link to the Claude session. Branch first, and check the author and the
+  message before committing.
 - **2026-11-04. An automatic hook asked for a commit before Tanya's OK.** The session waited for her
   answer, which was right.
 - **2026-11-04. A cloud session could not reach the live site.** Testing it needs
@@ -192,27 +206,33 @@ in the same commit that closes it. Dates are ET.
 5. **No session has tested the live Pages site** (found 2026-11-04).
 6. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
    In Spanish, "1000" received and "100,5" in cost sit beside "1101" paid back. Tanya to decide.
-7. **Make the pull request check required** (2026-11-06). Until Tanya does, a red check warns and
+7. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
+   rebuilt, the old commits stay readable in these places until GitHub Support removes them:
+   - pull requests #1 and #2, including their force-push events
+   - the repo's activity log
+   - any direct link to an old commit
+
+   The earlier versions of the descriptions of pull requests #1 and #2 also carry the link or an old
+   commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
+8. **Make the pull request check required** (2026-11-06). Until Tanya does, a red check warns and
    does not block a merge. In the repo's settings, open Branches and add a rule for `main` that
    requires the check.
-8. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
+9. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
    `kyl-browser-test.js`. Add it as `know-your-loan/test/browser.test.js` with what it needs to run
    (Playwright).
-9. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
+10. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
    (2026-11-06). A rule that lives only in a checklist is easy to skip.
-10. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
+11. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
     to decide.
-11. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
+12. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
     `CLAUDE.md` counts as changing it. A pull request runs its own copy of the check and could
     weaken it. Tanya's review guards against that.
-12. **The session hook names files again after `main` is merged into a branch** that has not changed
+13. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-13. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
+14. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
     strict JSON reader would reject it.
-14. **Commit `598b431` on `main` shows "Claude" as author** (2026-11-06). Changing that would rewrite
-    `main`'s history, so it stays unless Tanya says otherwise.
-15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once the pull request that added this file
-    merges (2026-11-06).
+15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+    (2026-11-06). Tanya said yes on 2026-11-06.
 16. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
     expands the middle line of a description passes them, because that line holds no `$(...)`. Put
     a `$(...)` on every line of the test's commands. The real check only passes the description to
