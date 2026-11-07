@@ -99,7 +99,8 @@ change leaves it no worse. The pull request says so.
 - [ ] The pull request names every screen the change touches. It says how each one was checked.
 - [ ] The pull request quotes what the reviewer found.
 - [ ] Once the pull request is open, its description on GitHub holds no link the tool added. On a
-      branch's first push, check this right after opening the pull request.
+      branch's first push, check this right after opening the pull request. If a link was removed,
+      tell Tanya, so she can delete the first version from the edit history.
 - [ ] This file is current (next section).
 
 ## Keep this file current
@@ -142,8 +143,10 @@ Newest first. Dates are ET.
   GitHub Support removes them. Read every commit message before it reaches `main`.
 - **2026-11-06. The tool that opens a pull request can add to its description.** The first pull
   request's closing line was replaced with a footer that linked back to the Claude session. The
-  session saw it only by reading the description on GitHub. Read the description after opening a
-  pull request, and remove any link the tool added.
+  session saw it only by reading the description on GitHub. A tool added a footer with a link to the
+  Claude session to pull request #3 too. Read the description after opening a pull request, and
+  remove any link the tool added. The first version stays in the description's edit history until
+  Tanya deletes it, so tell her each time.
 - **2026-11-06. Commit times follow the machine's clock.** The cloud session keeps UTC, so commits
   were stamped +0000 and would show the next day's date every evening. Commit with
   `TZ=America/New_York` set.
@@ -217,12 +220,15 @@ in the same commit that closes it. Dates are ET.
    - the repo's activity log
    - any direct link to an old commit
 
-   The earlier versions of the descriptions of pull requests #1 and #2 also carry the link or an old
+   The earlier versions of the descriptions of pull requests #1 to #3 also carry the link or an old
    commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
 7. **Add the check to the ruleset on `main`** (2026-11-06). The ruleset "Protect main" has required
-   checks turned on, with an empty list. Until the list names `CLAUDE.md is current`, a red check
-   warns and does not block a merge. In the repo's settings, open "Protect main" under Rules. Under
-   "Require status checks to pass", add `CLAUDE.md is current` and save.
+   checks turned on. A read at 10:17 PM ET on 2026-11-06 found its list of checks still empty. Until
+   the list names `CLAUDE.md is current`, a red check warns and does not block a merge. In the repo's
+   settings, open "Protect main" under Rules. Under "Require status checks to pass", add
+   `CLAUDE.md is current` and save. Close this item once a read of the ruleset lists the check. The
+   ruleset already asks for a branch to be up to date with `main`, and that takes effect once a check
+   is listed.
 8. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
    `kyl-browser-test.js`. Add it as `know-your-loan/test/browser.test.js` with what it needs to run
    (Playwright).
@@ -233,13 +239,17 @@ in the same commit that closes it. Dates are ET.
 11. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
     `CLAUDE.md` counts as changing it. A pull request runs its own copy of the check and could
     weaken it. Tanya's review guards against that.
-12. **The session hook names files again after `main` is merged into a branch** that has not changed
+12. **Move `actions/checkout` from v4 to its newest major version** (2026-11-06). GitHub is retiring
+    Node.js 20, which v4 was built for. GitHub now runs v4 on Node.js 24 and shows a warning. Confirm
+    which version runs on Node.js 24 before the move. Once the check is required, a broken check
+    blocks every merge. The change is one line in `.github/workflows/claude-md-check.yml`.
+13. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-13. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
+14. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
     strict JSON reader would reject it.
-14. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
     (2026-11-06). Tanya said yes on 2026-11-06.
-15. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
+16. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
     expands the middle line of a description passes them, because that line holds no `$(...)`. Put
     a `$(...)` on every line of the test's commands. The real check only passes the description to
     `grep`, so nothing is wrong today.
