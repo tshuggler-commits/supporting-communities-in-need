@@ -1,0 +1,32 @@
+# Fails a pull request that changes files without updating CLAUDE.md, unless its description says
+# why no update is needed. The logic and its tests are in .github/scripts/.
+name: CLAUDE.md check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  claude-md:
+    name: CLAUDE.md is current
+    # Pinned on purpose. ubuntu-latest moves to new images without notice. Move up deliberately.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test the check itself
+        run: bash .github/scripts/claude-md-check.test.sh
+      - name: Check that CLAUDE.md changed, or the description says why not
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          gh api "repos/$REPO/pulls/$PR_NUMBER/files" --paginate --jq '.[].filename' > "$RUNNER_TEMP/files.txt"
+          bash .github/scripts/claude-md-check.sh < "$RUNNER_TEMP/files.txt"
