@@ -58,10 +58,12 @@ This repo's `CLAUDE.md` wins over this file for anything about this repo.
 ## Records
 
 - **Write records from the log.** Memory drifts.
+- **Read a setting back in full before you record it as done.** A summary can call a setting on
+  while part of it is still empty.
 - **A commit message is a record.** Check it like one, before it reaches `main`. Fixing one later
   means rebuilding `main`.
 - **Read a pull request's description on GitHub after opening it.** A tool can add text you did not
-  write.
+  write. Removing it leaves the first version in the edit history, so tell the repo's owner.
 - **An earlier commit stays readable after a later fix.** Before a branch is first pushed, rebuild it
   so no commit holds what should not be published.
 - **Correct a wrong record in the same commit that finds the error**, and say what was wrong.
