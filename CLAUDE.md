@@ -86,7 +86,7 @@ change leaves it no worse. The pull request says so.
   - the worksheet prints on 2 pages in every language, on both A4 and Letter paper
   - after one visit, the app opens and calculates with the network off
   - the page contacts no other website
-  - nothing scrolls sideways at 320 px or 375 px wide
+  - nothing scrolls sideways at 320 px or 375 px wide, measured against the screen's real width
 - [ ] Every screen the change touches was screenshotted at phone width and looked at before the push.
 - [ ] If a file the app loads changed, `VERSION` in `know-your-loan/sw.js` changed too. A new file is
       also in its `ASSETS` list.
@@ -132,6 +132,21 @@ Tanya, 2026-11-06 (ET): *"Make sure it is getting updated as changes are made."*
 
 Newest first. Dates are ET.
 
+- **2026-11-08. Smaller print cost readability for no gain.** To fit the worksheet on 2 pages, a
+  draft shrank both printed checklists to 14 px text, though only page 1 was too long. A review
+  found that page 2 was less than half full. Tighter spacing on page 1 alone was enough. On paper
+  people keep, tighten spacing before shrinking text, and only where the page needs it.
+- **2026-11-08. A phone's page grows to fit what is too wide.** The session's first check compared
+  the page's width with itself. A phone's browser widens the page to fit wide content, so the check
+  read 0 while Calculate scrolled sideways at 320 px on `main`. Measured against the screen's real
+  width, it scrolled 13 px in Spanish and 18 px in French with the form empty. With any period
+  between payments other than 1, it scrolled up to 28 px, English included. The browser test
+  measures the same way and checks phones only at 393 px, so it would have missed this too.
+  Measure every box against the screen's real width.
+- **2026-11-08. A taller bar overlapped the last button.** The bottom bar gained 8 px of padding and
+  grew to 86 px at 320 px, where a label wraps onto two lines. The page kept only 84 px under its
+  content, so the bar covered about 2 px of the Clear button's padding on Warning signs. A
+  measurement caught it before the push. Leave room under the page for a fixed bar at its tallest.
 - **2026-11-06. A protected branch is not proof of a required check.** After Tanya saved the ruleset
   for `main`, GitHub listed `main` as protected. The session took that as proof the check was
   required. The review read the ruleset itself. Its required checks were turned on with an empty
@@ -205,19 +220,24 @@ Newest first. Dates are ET.
 Ranked by what each item costs the people who use the app, then Tanya, highest first. Remove an item
 in the same commit that closes it. Dates are ET.
 
-1. **The worksheet prints on 3 pages** (found 2026-11-05). Only English on A4 fits on 2. The fix
-   belongs in the print styles in `know-your-loan/css/styles.css`. Keep the writing rows at least
-   about 9 mm tall. Then change `VERSION` in `sw.js`.
-2. **Spanish and French need review by a native speaker** (2026-11-06), as
+1. **Spanish and French need review by a native speaker** (2026-11-06), as
    `know-your-loan/docs/TRANSLATING.md` says.
-3. **The bottom bar's padding can be 0 on phones without a notch** (2026-11-06).
-   `know-your-loan/css/styles.css` line 150 uses `env(safe-area-inset-bottom)` alone.
-   `BUILD-RULES.md` asks for `max(8px, env(safe-area-inset-bottom))`. Changing it needs screenshots
-   and a new `VERSION`.
-4. **No session has tested the live Pages site** (found 2026-11-04).
-5. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
+2. **No session has tested the live Pages site** (found 2026-11-04).
+3. **No session has printed the worksheet from Safari or Firefox** (2026-11-08). Every print
+   check so far used Chromium. Print it once from an iPhone and once from Firefox, on A4 and Letter
+   paper.
+4. **A large amount still scrolls sideways at 320 px** (found 2026-11-08). Result amounts can run
+   past the screen. 5,000,000 with the money named "guaraníes" runs 7 px past in Spanish.
+   Nine-digit totals run up to 34 px past in Spanish and 26 px in French. In English they run 3 px
+   past.
+5. **Large text crowds the header and the bottom bar** (2026-11-08). In a browser test with text at
+   130% to 150%, the language menu ran 2 to 38 px past the screen at 320 px on all three screens.
+   The bottom bar covered 3 to 10 px of the last item. A label that wraps also makes the bar
+   taller, so its height changes from one screen to the next, while the page leaves a fixed 92 px
+   under its content. It needs a check on a phone with large text turned on.
+6. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
    In Spanish, "1000" received and "100,5" in cost sit beside "1101" paid back. Tanya to decide.
-6. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
+7. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
    rebuilt, the old commits stay readable in these places until GitHub Support removes them:
    - pull requests #1 and #2, including their force-push events
    - the repo's activity log
@@ -225,28 +245,29 @@ in the same commit that closes it. Dates are ET.
 
    The earlier versions of the descriptions of pull requests #1 to #3 also carry the link or an old
    commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
-7. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
+8. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
    `kyl-browser-test.js`. Add it as `know-your-loan/test/browser.test.js` with what it needs to run
-   (Playwright).
-8. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
+   (Playwright). Its sideways check compares the page with itself, and it checks phones only at
+   393 px. Fix both as it is added.
+9. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
    (2026-11-06). A rule that lives only in a checklist is easy to skip.
-9. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
-   to decide.
-10. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
+10. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
+    to decide.
+11. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
     `CLAUDE.md` counts as changing it. A pull request runs its own copy of the check and could
     weaken it. Tanya's review guards against that.
-11. **Move `actions/checkout` from v4 to its newest major version** (2026-11-06). GitHub is retiring
+12. **Move `actions/checkout` from v4 to its newest major version** (2026-11-06). GitHub is retiring
     Node.js 20, which v4 was built for. GitHub now runs v4 on Node.js 24 and shows a warning. Confirm
     which version runs on Node.js 24 before the move. The check is required, so a broken check
     blocks every merge into `main`. The change is one line in
     `.github/workflows/claude-md-check.yml`.
-12. **The session hook names files again after `main` is merged into a branch** that has not changed
+13. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-13. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
+14. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
     strict JSON reader would reject it.
-14. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
     (2026-11-06). Tanya said yes on 2026-11-06.
-15. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
+16. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
     expands the middle line of a description passes them, because that line holds no `$(...)`. Put
     a `$(...)` on every line of the test's commands. The real check only passes the description to
     `grep`, so nothing is wrong today.
