@@ -79,3 +79,24 @@ the change was cut down to what the reads show.
     version, ranked by the backlog's own rule.
 16. **(T5, C)** Criteria 6 to 9 hold for these changes too. One independent reviewer checks criteria
     12 to 16 before the push. The description is updated and read back on GitHub.
+
+## Added 2026-11-08 (ET): the check is listed
+
+Written 2026-11-08 (ET), before the change they describe.
+
+### Sources
+
+- **T6.** Tanya, 2026-11-08 (ET): *"Done"*. Asked whether `CLAUDE.md is current` was listed under
+  "Require status checks to pass" when she reopened "Protect main" after saving, she answered
+  *"Yes, it's listed"*.
+
+### Criteria
+
+17. **(T6, C)** The backlog item about adding the check closes, and its number is reused by the next
+    item. Every other item keeps its words and order, apart from the change in criterion 19.
+18. **(T3, T6, D)** The rule about pull requests says Tanya confirmed on 2026-11-08 (ET) that the
+    ruleset lists `CLAUDE.md is current`. It says the read on 2026-11-06 (ET) found the ruleset asks
+    for a branch to be up to date with `main`, which takes effect once a check is listed.
+19. **(T6, C)** The backlog item about `actions/checkout` says the check is required.
+20. **(C)** Criteria 6 to 9 hold for these changes too. One independent reviewer checks criteria 17
+    to 20 before the push. The description is updated and read back on GitHub.
