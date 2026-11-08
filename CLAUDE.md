@@ -38,7 +38,10 @@ repo and decides everything in it.
   a pull request. To bring `main` into a branch, use `git merge`. Never rebase and force-push. Push
   with the branch named: `git push -u origin <branch>`. Since 2026-11-06 (ET), a ruleset named
   "Protect main" requires a pull request into `main`, and no one can bypass it. It also blocks force
-  pushes to `main` and blocks deleting it.
+  pushes to `main` and blocks deleting it. On 2026-11-08 (ET) Tanya confirmed that
+  `CLAUDE.md is current` is listed under its required checks. The read on 2026-11-06 (ET) found the
+  ruleset also asks for a branch to be up to date with `main`. That setting applies only once a
+  check is listed, and no read since then has confirmed it.
 - **Ask Tanya before anything reaches `main` or changes repo settings.** That holds even when an
   automatic hook says to commit and push.
 - **Tanya is the author of every commit, merges included** (her choice, 2026-11-06 ET). Set it once
@@ -222,34 +225,28 @@ in the same commit that closes it. Dates are ET.
 
    The earlier versions of the descriptions of pull requests #1 to #3 also carry the link or an old
    commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
-7. **Add the check to the ruleset on `main`** (2026-11-06). The ruleset "Protect main" has required
-   checks turned on. A read at 10:17 PM ET on 2026-11-06 found its list of checks still empty. Until
-   the list names `CLAUDE.md is current`, a red check warns and does not block a merge. In the repo's
-   settings, open "Protect main" under Rules. Under "Require status checks to pass", add
-   `CLAUDE.md is current` and save. Close this item once a read of the ruleset lists the check. The
-   ruleset already asks for a branch to be up to date with `main`, and that takes effect once a check
-   is listed.
-8. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
+7. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
    `kyl-browser-test.js`. Add it as `know-your-loan/test/browser.test.js` with what it needs to run
    (Playwright).
-9. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
+8. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
    (2026-11-06). A rule that lives only in a checklist is easy to skip.
-10. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
-    to decide.
-11. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
+9. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
+   to decide.
+10. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
     `CLAUDE.md` counts as changing it. A pull request runs its own copy of the check and could
     weaken it. Tanya's review guards against that.
-12. **Move `actions/checkout` from v4 to its newest major version** (2026-11-06). GitHub is retiring
+11. **Move `actions/checkout` from v4 to its newest major version** (2026-11-06). GitHub is retiring
     Node.js 20, which v4 was built for. GitHub now runs v4 on Node.js 24 and shows a warning. Confirm
-    which version runs on Node.js 24 before the move. Once the check is required, a broken check
-    blocks every merge. The change is one line in `.github/workflows/claude-md-check.yml`.
-13. **The session hook names files again after `main` is merged into a branch** that has not changed
+    which version runs on Node.js 24 before the move. The check is required, so a broken check
+    blocks every merge into `main`. The change is one line in
+    `.github/workflows/claude-md-check.yml`.
+12. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-14. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
+13. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
     strict JSON reader would reject it.
-15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+14. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
     (2026-11-06). Tanya said yes on 2026-11-06.
-16. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
+15. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
     expands the middle line of a description passes them, because that line holds no `$(...)`. Put
     a `$(...)` on every line of the test's commands. The real check only passes the description to
     `grep`, so nothing is wrong today.
