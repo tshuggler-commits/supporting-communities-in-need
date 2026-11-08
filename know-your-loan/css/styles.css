@@ -32,7 +32,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font: 18px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  padding-bottom: 84px;
+  padding-bottom: 92px; /* room for the bottom bar */
 }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
@@ -65,7 +65,7 @@ input, select { font: inherit; color: var(--ink); }
 input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
   outline: 3px solid var(--focus); outline-offset: 2px;
 }
-.schedule { display: flex; align-items: center; gap: 10px; }
+.schedule { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; } /* the menu moves to its own line when the row is wider than the screen */
 .schedule span { font-weight: 600; min-width: 4.5ch; }
 .schedule input { width: 5.5em; flex: none; }
 .schedule select {
@@ -147,7 +147,7 @@ dl.rows .key dd { color: var(--warn); font-size: 22px; }
 /* Bottom tabs */
 .tabbar {
   position: fixed; left: 0; right: 0; bottom: 0; display: flex; background: var(--paper);
-  border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid var(--line); padding-bottom: 8px; padding-bottom: max(8px, env(safe-area-inset-bottom));
 }
 .tabbar a {
   flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -168,5 +168,9 @@ dl.rows .key dd { color: var(--warn); font-size: 22px; }
   main { max-width: none; padding: 0; }
   .sheet { border: 0; padding: 0; }
   .sheet .page2 { break-before: page; margin-top: 0; }
-  .sheet td { font-size: 14px; padding: 9px; height: 40px; }
+  /* Spanish and French run longer than English. These keep page 1 on one sheet of A4 or Letter. */
+  .sheet > h3 { margin: 14px 0 6px; }
+  .sheet .meta-row { margin: 10px 0; }
+  .sheet td { font-size: 14px; padding: 7px 9px; height: 36px; } /* 36px is 9.5 mm, room to write */
+  .sheet > .ask li { padding: 4px 0; } /* page 1's questions; page 2 keeps its spacing */
 }

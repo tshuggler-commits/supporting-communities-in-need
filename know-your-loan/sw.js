@@ -1,7 +1,7 @@
 /* Offline support. Everything the app needs is saved on the phone the first time it loads.
    Change VERSION when you change any file, so phones pick up the new copy on the next launch.
    There is no forced update: the new copy is used after the app is closed and opened again. */
-const VERSION = 'kyl-v2';
+const VERSION = 'kyl-v3';
 const ASSETS = [
   './',
   'index.html',

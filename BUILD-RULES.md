@@ -45,6 +45,7 @@ This repo's `CLAUDE.md` wins over this file for anything about this repo.
   can still break on an iPhone.
 - **A browser test waits for the screen to change** before it checks anything.
 - **Test layout in the longest language, on every paper size people use.**
+- **On paper people keep, tighten spacing before shrinking text**, and only where the page needs it.
 
 ## Changes people can see
 
@@ -89,11 +90,14 @@ This repo's `CLAUDE.md` wins over this file for anything about this repo.
 - **Tap targets need 44 px of width as well as height.**
 - **Form fields use at least 16 px text.** Smaller text makes iPhones zoom on focus.
 - **Measure each element's box.** A page that hides overflow can pass a sideways-scroll check with
-  content cut off.
+  content cut off. Compare each box with the screen's real width, since a phone's browser widens
+  the page to fit what is too wide.
 - **Measure behind tabs and inside sheets too.**
 - **Browser storage can be blocked.** Back anything stored there with an in-page flag.
 - **Bottom padding uses `max(8px, env(safe-area-inset-bottom))`.** The inset is 0 on a phone without
   a notch.
+- **Leave room under the page for a fixed bottom bar at its tallest.** Labels can wrap on a narrow
+  phone and make the bar taller.
 
 ## Dependencies
 
