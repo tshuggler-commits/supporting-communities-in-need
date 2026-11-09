@@ -460,6 +460,8 @@ setTimeout(() => {
   // Each screen is checked at four common widths, in the states the test fills in below. Very large
   // amounts are left out on purpose: they still run past the edge (CLAUDE.md backlog).
   console.log('\n== 11. Narrow phones ==');
+  const rowFaults = [];
+  let rowsMeasured = 0;
   for (const width of [320, 360, 375, 393]) {
     for (const lang of ['en', 'es', 'fr']) {
       const ctxNarrow = await browser.newContext({ viewport: { width, height: 740 }, isMobile: true, hasTouch: true, locale: 'en-US' });
@@ -477,9 +479,26 @@ setTimeout(() => {
         await p.evaluate(() => { document.querySelector('details.more').open = true; });
         await fillLoan(p, { count: 6, installment: 200, quoted: 10, money: 'Córdobas' });
         await look("Calculate, the lender's rate and a money name");
-        await p.fill('#save-name', 'Préstamo del grupo de ahorro');
-        await p.$eval('#save-btn', (b) => b.click());
-        await look('Calculate, a saved offer');
+        // Saved names of three lengths. The longest is one word of 40 letters, the most the box
+        // takes. The short one keeps its buttons beside it.
+        for (const name of ['Banco', 'Cooperativa de ahorro del barrio', 'Préstamocooperativodelbarriosanjudastade']) {
+          await p.fill('#save-name', name);
+          await p.$eval('#save-btn', (b) => b.click());
+        }
+        await look('Calculate, saved offers with long names');
+        // Every row keeps its buttons inside it, and the short name keeps them beside it.
+        const rows = await p.$$eval('#saved-list li', (lis) => lis.map((li) => {
+          const a = li.querySelector('.actions').getBoundingClientRect(), r = li.getBoundingClientRect();
+          const f = li.firstElementChild.getBoundingClientRect();
+          return { name: li.querySelector('.name').textContent, drawn: r.width > 0 && a.width > 0,
+            inside: a.right <= r.right + 0.5 && a.left >= r.left - 0.5, beside: a.left >= f.right && a.top < f.bottom };
+        }));
+        const here = width + ' px ' + lang.toUpperCase();
+        const drawn = rows.filter((r) => r.drawn).length;
+        if (rows.length === 3 && drawn === 3) rowsMeasured++;
+        else rowFaults.push(here + ': ' + drawn + ' of ' + rows.length + ' rows drawn');
+        rows.filter((r) => !r.inside).forEach((r) => rowFaults.push(here + ': buttons outside the row of ' + r.name.slice(0, 12)));
+        rows.filter((r) => r.name === 'Banco' && !r.beside).forEach(() => rowFaults.push(here + ': Banco has its buttons under it'));
         await p.fill('#count', '1.5');
         await p.waitForSelector('#result ul.errors li', { timeout: 5000 }).catch(() => {});
         await look('Calculate, a mistake in the form');
@@ -495,6 +514,8 @@ setTimeout(() => {
       await ctxNarrow.close();
     }
   }
+  check('Saved offers keep their buttons in the row, beside a short name, at every phone width',
+    rowFaults.length === 0 && rowsMeasured === 12, rowsMeasured + ' of 12 measured; ' + (rowFaults.slice(0, 4).join(' | ') || 'no faults'));
 
   // ---------- Errors and privacy ----------
   // Close every page first, so requests sent as a page closes are counted too.
