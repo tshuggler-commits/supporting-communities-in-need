@@ -23,10 +23,12 @@ expect() {
 nl='
 '
 # On every path through the check, some description carries commands that would make a marker
-# file if anything ran them. Each description that carries commands starts and ends with one.
+# file if anything ran them. They run 12 lines, and every line holds a $(...). So a check that
+# expands any one of a description's first 12 lines makes a marker too.
 ran="$(mktemp -d 2>/dev/null)" || { ran="/tmp/claude-md-check-test.$$"; mkdir -p "$ran"; }
 [ -d "$ran" ] || { echo "cannot make a marker folder"; exit 2; }
-cmds="\$(touch $ran/a) \`touch $ran/b\`${nl}touch $ran/d${nl}\$(touch $ran/c)"
+cmds="\$(touch $ran/a) \`touch $ran/b\`"
+for i in 2 3 4 5 6 7 8 9 10 11 12; do cmds="${cmds}${nl}\$(touch $ran/l$i) touch $ran/m$i"; done
 
 expect "01 no files changed: passes" 0 "" "$cmds"
 expect "02 CLAUDE.md among the files: passes" 0 "README.md${nl}CLAUDE.md${nl}" "$cmds"

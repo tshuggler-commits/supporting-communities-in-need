@@ -43,7 +43,14 @@ This repo's `CLAUDE.md` wins over this file for anything about this repo.
 - **A test checks what it claims.** If it says output is valid, it parses the output.
 - **Mark checks that need a real phone for a person to do.** A page that works in a desktop browser
   can still break on an iPhone.
-- **A browser test waits for the screen to change** before it checks anything.
+- **A browser test waits for the screen to change** before it checks anything. Every wait has a time
+  limit, so a broken app fails quickly in place of hanging. The whole run has a limit too.
+- **A privacy check watches the network itself, and says what it cannot see.** Page events miss
+  requests from offline code and requests sent as a page closes. Some routes, such as WebRTC, go
+  around even the network watch.
+- **Check what a page shows, along with how many pages print.** Read each line from the element
+  that holds its words, since a row can show while the words inside it are hidden. List the ways
+  past it that reviews find, and say there may be more.
 - **Test layout in the longest language, on every paper size people use.**
 - **On paper people keep, tighten spacing before shrinking text**, and only where the page needs it.
 
@@ -103,6 +110,7 @@ This repo's `CLAUDE.md` wins over this file for anything about this repo.
 
 - **Sort security alerts by what runs in production.** Build and test tools are not shipped.
 - **Fix within range first** (`npm audit fix`, never `--force`), then prove nothing on screen moved.
+- **Read a dependency's newest version from its own tags or registry.** Search summaries disagree.
 
 ## Shell and CI
 

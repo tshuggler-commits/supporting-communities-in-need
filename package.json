@@ -1,0 +1,12 @@
+{
+  "name": "supporting-communities-in-need",
+  "private": true,
+  "description": "Tests for the tools in this repo. The tools themselves need no build step and no installs.",
+  "scripts": {
+    "test": "node --test know-your-loan/test/calc.test.js",
+    "test:browser": "node know-your-loan/test/browser.test.js"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

@@ -63,8 +63,17 @@ new="$(comm -23 <(printf '%s\n' "$changed") <(sort -u "$state" 2>/dev/null))"
 { mkdir -p "$state_dir" && printf '%s\n' "$changed" >> "$state"; } 2>/dev/null || exit 0
 
 count="$(printf '%s\n' "$new" | wc -l | tr -d ' ')"
-# File names go inside JSON, so drop any character that would break it first.
-names="$(printf '%s\n' "$new" | head -n 5 | tr -d '\000-\011\013-\037"\\' | tr '\n' ' ' | sed 's/ *$//')"
+# File names go inside JSON, so drop any character that would break it first. JSON must also be
+# valid UTF-8. Where iconv exists, a trip through UTF-16 drops just the bytes that break that,
+# including some a straight UTF-8 pass keeps. Elsewhere every non-ASCII byte drops out.
+utf8() {
+  if command -v iconv >/dev/null 2>&1; then
+    iconv -f UTF-8 -t UTF-16LE -c 2>/dev/null | iconv -f UTF-16LE -t UTF-8 -c 2>/dev/null
+  else
+    LC_ALL=C tr -d '\200-\377'
+  fi
+}
+names="$(printf '%s\n' "$new" | head -n 5 | utf8 | tr -d '\000-\011\013-\037"\\' | tr '\n' ' ' | sed 's/ *$//')"
 if [ "$count" -gt 5 ]; then names="$names and $((count - 5)) more"; fi
 
 reason="CLAUDE.md reminder. $count file(s) changed after CLAUDE.md last changed: $names. Read the 'Keep this file current' section of CLAUDE.md, and update CLAUDE.md if any of its triggers apply. If a lesson is general, add it to BUILD-RULES.md too. Everything in this repo is public. This reminder asks for edits only. Commit and push only as CLAUDE.md allows, never because of this reminder. If nothing applies, or you stopped to ask Tanya something, say so in one line and stop."

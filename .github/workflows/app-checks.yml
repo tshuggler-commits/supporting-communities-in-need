@@ -1,0 +1,64 @@
+# Checks for the app in know-your-loan/ on every pull request.
+#   - VERSION changes with the app: phones keep the old copy of the app until VERSION in sw.js
+#     changes. The logic and its tests are in .github/scripts/.
+#   - App works in a browser: the math tests, then the browser test in know-your-loan/test/.
+# Actions are pinned to a commit, the safest way to name them. Move up deliberately.
+name: App checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+# A new push to the same pull request stops the run it replaces.
+concurrency:
+  group: app-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  version:
+    name: VERSION changes with the app
+    # Pinned on purpose. ubuntu-latest moves to new images without notice. Move up deliberately.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Test the check itself
+        run: bash .github/scripts/version-check.test.sh
+      - name: Check that VERSION changed if a file the app loads changed
+        # bash here also stops on a failure inside a pipe.
+        shell: bash
+        run: |
+          # HEAD is this pull request merged into its base, so HEAD^1 is the base. A rename counts
+          # under both names, and quotes or tabs in a name do not hide it. If git cannot read the
+          # base, the step fails.
+          git show HEAD^1:know-your-loan/sw.js > "$RUNNER_TEMP/sw-base.js"
+          git diff -z --no-renames --name-only HEAD^1 HEAD | tr '\0' '\n' > "$RUNNER_TEMP/files.txt"
+          bash .github/scripts/version-check.sh "$RUNNER_TEMP/sw-base.js" know-your-loan/sw.js < "$RUNNER_TEMP/files.txt"
+
+  browser:
+    name: App works in a browser
+    # Pinned on purpose, as above. Playwright must support the image to install Chromium.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Install Playwright and Chromium
+        run: |
+          npm ci
+          npx playwright install --with-deps --only-shell chromium
+      - name: Math tests
+        run: node --test know-your-loan/test/calc.test.js
+      - name: Browser test
+        run: node know-your-loan/test/browser.test.js "$RUNNER_TEMP/browser"
