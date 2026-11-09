@@ -112,6 +112,11 @@ dl.rows .key dd { color: var(--warn); font-size: 22px; }
 .btn-quiet { font: inherit; background: none; border: 0; color: var(--accent); text-decoration: underline; padding: 12px 0; cursor: pointer; min-height: 44px; }
 .saved ul { list-style: none; margin: 0; padding: 0; }
 .saved li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); align-items: center; }
+/* The buttons move under the name only when the longest word of the name or its cost line cannot
+   fit beside them. A word wider than the row breaks, so nothing runs past the screen. */
+.saved li { flex-wrap: wrap; }
+.saved li > :first-child { flex: 1 1 auto; flex-basis: min-content; min-width: 0; overflow-wrap: break-word; }
+.saved .actions { margin-left: auto; }
 .saved .name { font-weight: 650; }
 .saved .meta { color: var(--muted); font-size: 15px; }
 .saved .actions { display: flex; gap: 4px; flex: none; }

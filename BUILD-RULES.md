@@ -58,6 +58,9 @@ This repo's `CLAUDE.md` wins over this file for anything about this repo.
 
 - **Name the screens each change touches, and test each one.**
 - **Check that every screen on that list still does what it did before.**
+- **Test each text box with the longest input it takes, written as one word.** A row keeps its text
+  at least as wide as its longest word, so one long word can push what sits beside it off the
+  screen.
 - **Design for the fewest taps.** Explain in writing any flow that needs more than one.
 - **Every label says what the tap does today.**
 - **Every path through the code shows something.** A branch that matches nothing needs a visible

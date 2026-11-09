@@ -140,6 +140,16 @@ Tanya, 2026-11-06 (ET): *"Make sure it is getting updated as changes are made."*
 
 Newest first. Dates are ET.
 
+- **2026-11-08. The longest name the box takes pushed the buttons off the screen.** The backlog said
+  a saved name ran 17 px past a 320 px screen in French, with a wider font. A measurement with the
+  longest name the box takes, one word of 40 letters, found Open and Delete pushed off the screen at
+  every phone width in all three languages. It did so with both fonts tried. A row keeps its text at
+  least as wide as its longest word, so one long word pushed the buttons out. A review found more.
+  In French at 320 px with the default font, a one-word name such as "Cooperativa" pushed the
+  buttons past the end of the row and into the page margin, where a check against the screen's edge
+  cannot see it. The browser test now checks that the buttons stay inside the row. The buttons
+  now move under the name when its longest word cannot fit beside them, and a word wider than the
+  row breaks. Test each text box with the longest input it takes, written as one word.
 - **2026-11-08. A required check is matched by its exact name.** Tanya added the two new checks to
   "Protect main". Read back, one was listed as "app works in browser", while the job reports
   "App works in a browser". GitHub waits for a check with the listed name, so every pull request
@@ -203,7 +213,7 @@ Newest first. Dates are ET.
 - **2026-11-06. The tool that opens a pull request can add to its description.** The first pull
   request's closing line was replaced with a footer that linked back to the Claude session. The
   session saw it only by reading the description on GitHub. A tool added a footer with a link to the
-  Claude session to pull requests #3 to #5 too. Read the description after opening a pull request,
+  Claude session to pull requests #3 to #6 too. Read the description after opening a pull request,
   and remove any link the tool added. The first version stays in the description's edit history
   until Tanya deletes it, so tell her each time.
 - **2026-11-06. Commit times follow the machine's clock.** The cloud session keeps UTC, so commits
@@ -266,36 +276,35 @@ in the same commit that closes it. Dates are ET.
 2. **No session has tested the live Pages site** (found 2026-11-04).
 3. **No session has printed the worksheet from Safari or Firefox** (2026-11-08). Every print
    check so far used Chromium. Print it once from an iPhone and once from Firefox, on A4 and Letter
-   paper.
+   paper. On the iPhone and in Firefox, also save one offer with a short name and one named with a
+   single word of about 40 letters. The short one should keep its buttons beside it, and the long
+   one should have them underneath. Only Chromium has drawn that layout.
 4. **A large amount still scrolls sideways at 320 px** (found 2026-11-08). Result amounts can run
    past the screen. 5,000,000 with the money named "guaraníes" runs 7 px past in Spanish.
    Nine-digit totals run up to 34 px past in Spanish and 26 px in French. In English they run 3 px
-   past.
+   past. The money name box takes 12 letters, and a long name runs further. With
+   "WWWWWWWWWWWW" and an amount of 1000, the page ran 84 to 116 px past with the default font.
 5. **Large text crowds the header and the bottom bar** (2026-11-08). In a browser test with text at
    130% to 150%, the language menu ran 2 to 38 px past the screen at 320 px on all three screens.
    The bottom bar covered 3 to 10 px of the last item. A label that wraps also makes the bar
    taller, so its height changes from one screen to the next, while the page leaves a fixed 92 px
    under its content. It needs a check on a phone with large text turned on.
-6. **A long word in a saved offer's name runs past a 320 px screen with a wider font** (found
-   2026-11-08). With DejaVu Sans, the name "Cooperativa de ahorro del barrio" runs 17 px past the
-   screen in French, because the row keeps its buttons beside the name. The fix belongs in the saved
-   list's styles. Then change `VERSION` in `sw.js`.
-7. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
+6. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
    In Spanish, "1000" received and "100,5" in cost sit beside "1101" paid back. Tanya to decide.
-8. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
+7. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
    rebuilt, the old commits stay readable in these places until GitHub Support removes them:
    - pull requests #1 and #2, including their force-push events
    - the repo's activity log
    - any direct link to an old commit
 
-   The earlier versions of the descriptions of pull requests #1 to #5 also carry the link or an old
+   The earlier versions of the descriptions of pull requests #1 to #6 also carry the link or an old
    commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
-9. **`know-your-loan/README.md` describes only the math tests** (2026-11-08). Its "Run the tests"
+8. **`know-your-loan/README.md` describes only the math tests** (2026-11-08). Its "Run the tests"
    section and its line for `test/` predate the browser test. Those are Tanya's words, so new
    wording waits for her.
-10. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
-    to decide.
-11. **Routes the privacy check cannot see** (2026-11-08). The browser test catches ordinary web
+9. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
+   to decide.
+10. **Routes the privacy check cannot see** (2026-11-08). The browser test catches ordinary web
     traffic to another site and links that open a connection early. Reviews showed it misses:
     - WebRTC, which can reach a server directly
     - background sync, in a full browser
@@ -305,14 +314,14 @@ in the same commit that closes it. Dates are ET.
     - a link that opens a connection early, in a blank window the app opens itself
 
     Code review covers these. Tanya to decide whether CI should block all outside traffic as well.
-12. **Limits of the pull request checks** (2026-11-06). The CLAUDE.md check sees at most 3,000
+11. **Limits of the pull request checks** (2026-11-06). The CLAUDE.md check sees at most 3,000
     changed files, and deleting `CLAUDE.md` counts as changing it. A pull request runs its own copy
     of each check and could weaken it. Tanya's review guards against that. Two pull requests that
     each move `VERSION` to the same new value can each pass on their own, and the second would then
     ship with no new `VERSION`. Since 2026-11-08 the VERSION check is required, and the ruleset makes
     a branch bring in `main` before it merges, so the second should then fail. No pull request has
     tested that yet.
-13. **Browser test follow-ups** (2026-11-08), from its reviews:
+12. **Browser test follow-ups** (2026-11-08), from its reviews:
     - keep the screenshots and PDFs from a failed run in CI, so the failure can be seen
     - measure text that runs past its own box. Today the fixed bar widening with the page shows it.
     - page 1 of the printed worksheet has about 38 px (10 mm) to spare on Letter in Spanish and
@@ -343,7 +352,7 @@ in the same commit that closes it. Dates are ET.
     no cache headers, so it catches that.
     - the VERSION check counts two files the app does not load:
     `know-your-loan/assets/icon-maskable.svg` and `know-your-loan/.gitignore`
-14. **The session hook names files again after `main` is merged into a branch** that has not changed
+13. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+14. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
     (2026-11-06). Tanya said yes on 2026-11-06.
