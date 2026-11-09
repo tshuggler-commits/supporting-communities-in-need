@@ -68,6 +68,8 @@ This repo's `CLAUDE.md` wins over this file for anything about this repo.
 - **Write records from the log.** Memory drifts.
 - **Read a setting back in full before you record it as done.** A summary can call a setting on
   while part of it is still empty.
+- **Pick a required check from the list GitHub offers, then read its name back.** A check is
+  matched by its exact name, so a typed name one word short blocks every merge.
 - **A commit message is a record.** Check it like one, before it reaches `main`. Fixing one later
   means rebuilding `main`.
 - **Read a pull request's description on GitHub after opening it.** A tool can add text you did not

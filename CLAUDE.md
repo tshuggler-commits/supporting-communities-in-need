@@ -38,10 +38,13 @@ repo and decides everything in it.
   a pull request. To bring `main` into a branch, use `git merge`. Never rebase and force-push. Push
   with the branch named: `git push -u origin <branch>`. Since 2026-11-06 (ET), a ruleset named
   "Protect main" requires a pull request into `main`, and no one can bypass it. It also blocks force
-  pushes to `main` and blocks deleting it. On 2026-11-08 (ET) Tanya confirmed that
-  `CLAUDE.md is current` is listed under its required checks. The read on 2026-11-06 (ET) found the
-  ruleset also asks for a branch to be up to date with `main`. That setting applies only once a
-  check is listed, and no read since then has confirmed it.
+  pushes to `main` and blocks deleting it. A read of its rules at 8:27 PM (ET) on 2026-11-08 found
+  these required checks, each tied to GitHub Actions:
+  - `CLAUDE.md is current`
+  - `VERSION changes with the app`
+  - `App works in a browser`
+
+  The same read found that a branch must be up to date with `main` before it merges.
 - **Ask Tanya before anything reaches `main` or changes repo settings.** That holds even when an
   automatic hook says to commit and push.
 - **Tanya is the author of every commit, merges included** (her choice, 2026-11-06 ET). Set it once
@@ -137,6 +140,12 @@ Tanya, 2026-11-06 (ET): *"Make sure it is getting updated as changes are made."*
 
 Newest first. Dates are ET.
 
+- **2026-11-08. A required check is matched by its exact name.** Tanya added the two new checks to
+  "Protect main". Read back, one was listed as "app works in browser", while the job reports
+  "App works in a browser". GitHub waits for a check with the listed name, so every pull request
+  would have waited for a check that never comes. Tanya fixed the name, and a second read showed
+  all three exact, each tied to GitHub Actions. Pick each required check from the list GitHub
+  offers, then read the names back.
 - **2026-11-08. A privacy check claims only the routes it covers.** Each review of the privacy
   check found a new way past it. First a copy whose offline code phoned out passed. Then a copy that
   sent a beacon as each page closed passed, and then a copy that used WebRTC. Each fix closed the
@@ -194,9 +203,9 @@ Newest first. Dates are ET.
 - **2026-11-06. The tool that opens a pull request can add to its description.** The first pull
   request's closing line was replaced with a footer that linked back to the Claude session. The
   session saw it only by reading the description on GitHub. A tool added a footer with a link to the
-  Claude session to pull request #3 too. Read the description after opening a pull request, and
-  remove any link the tool added. The first version stays in the description's edit history until
-  Tanya deletes it, so tell her each time.
+  Claude session to pull requests #3 to #5 too. Read the description after opening a pull request,
+  and remove any link the tool added. The first version stays in the description's edit history
+  until Tanya deletes it, so tell her each time.
 - **2026-11-06. Commit times follow the machine's clock.** The cloud session keeps UTC, so commits
   were stamped +0000 and would show the next day's date every evening. Commit with
   `TZ=America/New_York` set.
@@ -279,18 +288,14 @@ in the same commit that closes it. Dates are ET.
    - the repo's activity log
    - any direct link to an old commit
 
-   The earlier versions of the descriptions of pull requests #1 to #3 also carry the link or an old
+   The earlier versions of the descriptions of pull requests #1 to #5 also carry the link or an old
    commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
-9. **Make the two new checks required** (2026-11-08). "VERSION changes with the app" and "App
-   works in a browser" run on every pull request, but only `CLAUDE.md is current` is required. In
-   the repo's settings, open "Protect main" under Rules. Under "Require status checks to pass", add
-   both and save. Then reopen it and check that all three are listed.
-10. **`know-your-loan/README.md` describes only the math tests** (2026-11-08). Its "Run the tests"
-    section and its line for `test/` predate the browser test. Those are Tanya's words, so new
-    wording waits for her.
-11. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
+9. **`know-your-loan/README.md` describes only the math tests** (2026-11-08). Its "Run the tests"
+   section and its line for `test/` predate the browser test. Those are Tanya's words, so new
+   wording waits for her.
+10. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
     to decide.
-12. **Routes the privacy check cannot see** (2026-11-08). The browser test catches ordinary web
+11. **Routes the privacy check cannot see** (2026-11-08). The browser test catches ordinary web
     traffic to another site and links that open a connection early. Reviews showed it misses:
     - WebRTC, which can reach a server directly
     - background sync, in a full browser
@@ -300,13 +305,14 @@ in the same commit that closes it. Dates are ET.
     - a link that opens a connection early, in a blank window the app opens itself
 
     Code review covers these. Tanya to decide whether CI should block all outside traffic as well.
-13. **Limits of the pull request checks** (2026-11-06). The CLAUDE.md check sees at most 3,000
+12. **Limits of the pull request checks** (2026-11-06). The CLAUDE.md check sees at most 3,000
     changed files, and deleting `CLAUDE.md` counts as changing it. A pull request runs its own copy
     of each check and could weaken it. Tanya's review guards against that. Two pull requests that
-    each move `VERSION` to the same new value can both pass, and the second then ships without a
-    new one. The ruleset's "up to date" setting stops that once it is read back as on and the
-    VERSION check is required.
-14. **Browser test follow-ups** (2026-11-08), from its reviews:
+    each move `VERSION` to the same new value can each pass on their own, and the second would then
+    ship with no new `VERSION`. Since 2026-11-08 the VERSION check is required, and the ruleset makes
+    a branch bring in `main` before it merges, so the second should then fail. No pull request has
+    tested that yet.
+13. **Browser test follow-ups** (2026-11-08), from its reviews:
     - keep the screenshots and PDFs from a failed run in CI, so the failure can be seen
     - measure text that runs past its own box. Today the fixed bar widening with the page shows it.
     - page 1 of the printed worksheet has about 38 px (10 mm) to spare on Letter in Spanish and
@@ -337,7 +343,7 @@ in the same commit that closes it. Dates are ET.
     no cache headers, so it catches that.
     - the VERSION check counts two files the app does not load:
     `know-your-loan/assets/icon-maskable.svg` and `know-your-loan/.gitignore`
-15. **The session hook names files again after `main` is merged into a branch** that has not changed
+14. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-16. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
     (2026-11-06). Tanya said yes on 2026-11-06.
