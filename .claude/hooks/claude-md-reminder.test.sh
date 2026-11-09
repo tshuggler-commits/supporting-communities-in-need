@@ -11,10 +11,11 @@ trap 'rm -rf "$tmp"' EXIT
 pass=0
 fail=0
 
+# Both readers refuse bytes that are not valid UTF-8, as a strict JSON reader does.
 if command -v node >/dev/null 2>&1; then
-  valid_json() { node -e 'JSON.parse(require("fs").readFileSync(0, "utf8"))' 2>/dev/null; }
+  valid_json() { node -e 'JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(require("fs").readFileSync(0)))' 2>/dev/null; }
 elif command -v python3 >/dev/null 2>&1; then
-  valid_json() { python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null; }
+  valid_json() { python3 -c 'import json,sys; json.loads(sys.stdin.buffer.read().decode("utf-8"))' 2>/dev/null; }
 else
   echo "needs node or python3 to check JSON"; exit 2
 fi
@@ -99,7 +100,19 @@ blocks "18 a file named CLAUDE_md: still blocks" "$R" '{}' "CLAUDE_md"
 printf 'q' > "$R/we\"ird\\na	me.txt"
 blocks "19 a name with special characters: valid JSON" "$R" '{}' "weird"
 printf 'q' > "$R/guía.md"
-blocks "20 a name with an accent: blocks and shows the name as written" "$R" '{}' "guía.md"
+# Without iconv the hook drops every non-ASCII byte, accents included.
+if command -v iconv >/dev/null 2>&1; then shown="guía.md"; else shown="gua.md"; fi
+blocks "20 a name with an accent: blocks and shows the name, with its accent where iconv exists" "$R" '{}' "$shown"
+printf 'q' > "$R/$(printf 'bad\377name.txt')"
+blocks "20b a name that is not valid UTF-8: valid JSON, with the rest of the name kept" "$R" '{}' "badname.txt"
+printf 'q' > "$R/$(printf 'past\364\220\200\200max.txt')"
+blocks "20c a name with a code above the Unicode range: valid JSON" "$R" '{}' "pastmax.txt"
+printf 'q' > "$R/$(printf 'five\370\210\200\200\200bytes.txt')"
+blocks "20d a name with a five-byte sequence: valid JSON" "$R" '{}' "fivebytes.txt"
+printf 'q' > "$R/aa-good.txt" && printf 'q' > "$R/$(printf 'zz\377second.txt')"
+blocks "20e two new names, the second not valid UTF-8: valid JSON, both named" "$R" '{}' "aa-good.txt zzsecond.txt"
+printf 'q' > "$R/$(printf 'ab\377first.txt')" && printf 'q' > "$R/ac-good.txt"
+blocks "20f two new names, the first not valid UTF-8: valid JSON, both named" "$R" '{}' "abfirst.txt ac-good.txt"
 quiet  "21 no input at all, nothing new: quiet" "$R" ''
 mv "$R/.git/claude-md-reminder" "$R/.git/state-saved" && touch "$R/.git/claude-md-reminder" && echo "z" > "$R/new.txt"
 quiet  "22 the state cannot be written: quiet, and nothing on stderr" "$R" '{}'

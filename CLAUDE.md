@@ -81,22 +81,27 @@ change leaves it no worse. The pull request says so.
 
 - [ ] Acceptance criteria came first in their own commit. Each one names its source.
 - [ ] `node --test test/calc.test.js` passes inside `know-your-loan/` (11 tests as of 2026-11-06 ET).
-- [ ] The browser checks pass. Until the browser test is in the repo (see Backlog), check by hand:
+- [ ] The browser test passes: `node know-your-loan/test/browser.test.js` from the repo root. The
+      first time, run `npm ci` and then `npx playwright install chromium`. The "App checks" workflow
+      runs it on every pull request too. Among its checks:
   - the page loads with no errors and no missing files
   - the worksheet prints on 2 pages in every language, on both A4 and Letter paper
   - after one visit, the app opens and calculates with the network off
-  - the page contacts no other website
-  - nothing scrolls sideways at 320 px or 375 px wide, measured against the screen's real width
+  - the page makes no ordinary web request to another site. The backlog lists the routes this
+    cannot see.
+  - nothing runs past the screen at 320 px and three wider phone widths up to 393 px, measured
+    against the screen's real width
 - [ ] Every screen the change touches was screenshotted at phone width and looked at before the push.
-- [ ] If a file the app loads changed, `VERSION` in `know-your-loan/sw.js` changed too. A new file is
-      also in its `ASSETS` list.
+- [ ] If a file the app loads changed, `VERSION` in `know-your-loan/sw.js` changed too. The "App
+      checks" workflow fails a pull request otherwise. A new file is also in its `ASSETS` list.
 - [ ] Every path the app uses is relative, with no leading `/`. The app lives in a Pages subfolder.
 - [ ] No placeholder or draft note is left in the words people read. Both searches print nothing:
       - `grep -rlzE '\[[^]]{3,}\]([^(]|$)' README.md know-your-loan/README.md know-your-loan/NOTICE know-your-loan/docs know-your-loan/locales know-your-loan/index.html`
       - `grep -rlziE 'draft[[:space:]]+for|replace[[:space:]]+this' README.md know-your-loan/README.md know-your-loan/NOTICE know-your-loan/docs know-your-loan/locales know-your-loan/index.html`
-- [ ] If a reminder script changed, its tests pass:
+- [ ] If a reminder or check script changed, its tests pass:
       - `bash .claude/hooks/claude-md-reminder.test.sh`
       - `bash .github/scripts/claude-md-check.test.sh`
+      - `bash .github/scripts/version-check.test.sh`
 - [ ] Nothing in the change is about work outside this repo, commit messages included.
 - [ ] `git log --format='%an <%ae>' origin/main..HEAD` shows only Tanya as author.
 - [ ] The pull request names every screen the change touches. It says how each one was checked.
@@ -132,6 +137,32 @@ Tanya, 2026-11-06 (ET): *"Make sure it is getting updated as changes are made."*
 
 Newest first. Dates are ET.
 
+- **2026-11-08. A privacy check claims only the routes it covers.** Each review of the privacy
+  check found a new way past it. First a copy whose offline code phoned out passed. Then a copy that
+  sent a beacon as each page closed passed, and then a copy that used WebRTC. Each fix closed the
+  routes found, and the next review found another, because the ways to reach the network have no
+  end. So the check now covers ordinary web traffic, through a stand-in that refuses it and writes it
+  down. A small script in each page the test opens reports links that open a connection early. The
+  backlog lists the routes it cannot see, and code review covers those. Claim only what a check
+  covers.
+- **2026-11-08. A print check claims only what it reads.** A review made the calculator print in
+  place of the worksheet, and the 2-page check still passed. A later review hid every question
+  inside rows that still showed, and the first text check passed too. The test now reads each line
+  of the worksheet from the element that holds its words, in the chosen language. Then a review
+  spoiled the printout in nine more ways, such as text drawn at zero size, and the check passed
+  them all. Each fix closed the ways found, and the next review found more, because the ways to
+  change what prints have no end, and the page the test reads is not the paper that prints. So the
+  check claims only what it reads, and the backlog lists the ways past it that reviews found. Check
+  what is on the page as well as how many pages there are, and claim only what the check reads.
+- **2026-11-08. A test could hang for hours.** With broken offline code, the browser test waited
+  for it forever, and the workflow had no time limit, so a run could last 6 hours. The test now
+  gives the offline code 15 seconds, and every job stops after 10 minutes. A later review found a
+  wait inside a page with no limit of its own, so the whole run now stops after 5 minutes and
+  fails. Give every wait a limit, and give the whole run one too.
+- **2026-11-08. Search results disagreed on a version.** Asked for the newest `actions/checkout`, a
+  web search named v5 and v7, each from a different summary. The project's own tags settled it:
+  v7.0.1, which runs on Node.js 24. Read a dependency's newest version from its tags or its
+  registry, never from a search summary.
 - **2026-11-08. Smaller print cost readability for no gain.** To fit the worksheet on 2 pages, a
   draft shrank both printed checklists to 14 px text, though only page 1 was too long. A review
   found that page 2 was less than half full. Tighter spacing on page 1 alone was enough. On paper
@@ -140,9 +171,10 @@ Newest first. Dates are ET.
   the page's width with itself. A phone's browser widens the page to fit wide content, so the check
   read 0 while Calculate scrolled sideways at 320 px on `main`. Measured against the screen's real
   width, it scrolled 13 px in Spanish and 18 px in French with the form empty. With any period
-  between payments other than 1, it scrolled up to 28 px, English included. The browser test
-  measures the same way and checks phones only at 393 px, so it would have missed this too.
-  Measure every box against the screen's real width.
+  between payments other than 1, it scrolled up to 28 px, English included. The browser test then
+  measured the same way and checked phones only at 393 px, so it would have missed this too. Since
+  2026-11-08 it measures every box, at four phone widths. Measure every box against the screen's
+  real width.
 - **2026-11-08. A taller bar overlapped the last button.** The bottom bar gained 8 px of padding and
   grew to 86 px at 320 px, where a label wraps onto two lines. The page kept only 84 px under its
   content, so the bar covered about 2 px of the Clear button's padding on Warning signs. A
@@ -235,9 +267,13 @@ in the same commit that closes it. Dates are ET.
    The bottom bar covered 3 to 10 px of the last item. A label that wraps also makes the bar
    taller, so its height changes from one screen to the next, while the page leaves a fixed 92 px
    under its content. It needs a check on a phone with large text turned on.
-6. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
+6. **A long word in a saved offer's name runs past a 320 px screen with a wider font** (found
+   2026-11-08). With DejaVu Sans, the name "Cooperativa de ahorro del barrio" runs 17 px past the
+   screen in French, because the row keeps its buttons beside the name. The fix belongs in the saved
+   list's styles. Then change `VERSION` in `sw.js`.
+7. **Large amounts round to whole numbers beside small ones that keep decimals** (found 2026-11-05).
    In Spanish, "1000" received and "100,5" in cost sit beside "1101" paid back. Tanya to decide.
-7. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
+8. **Remove the old copies of the Claude session link from GitHub** (2026-11-06). After `main` was
    rebuilt, the old commits stay readable in these places until GitHub Support removes them:
    - pull requests #1 and #2, including their force-push events
    - the repo's activity log
@@ -245,29 +281,63 @@ in the same commit that closes it. Dates are ET.
 
    The earlier versions of the descriptions of pull requests #1 to #3 also carry the link or an old
    commit ID, in their edit history. Tanya to ask GitHub Support, and to delete those revisions.
-8. **The browser test is not in the repo** (2026-11-06). It was handed to Tanya on 2026-11-05 as
-   `kyl-browser-test.js`. Add it as `know-your-loan/test/browser.test.js` with what it needs to run
-   (Playwright). Its sideways check compares the page with itself, and it checks phones only at
-   393 px. Fix both as it is added.
-9. **A check that fails a pull request when an app file changes and `VERSION` in `sw.js` does not**
-   (2026-11-06). A rule that lives only in a checklist is easy to skip.
-10. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
+9. **Make the two new checks required** (2026-11-08). "VERSION changes with the app" and "App
+   works in a browser" run on every pull request, but only `CLAUDE.md is current` is required. In
+   the repo's settings, open "Protect main" under Rules. Under "Require status checks to pass", add
+   both and save. Then reopen it and check that all three are listed.
+10. **`know-your-loan/README.md` describes only the math tests** (2026-11-08). Its "Run the tests"
+    section and its line for `test/` predate the browser test. Those are Tanya's words, so new
+    wording waits for her.
+11. **No automatic check reads new text for anything that should not be public** (2026-11-06). Tanya
     to decide.
-11. **Limits of the pull request check** (2026-11-06). It sees at most 3,000 changed files. Deleting
-    `CLAUDE.md` counts as changing it. A pull request runs its own copy of the check and could
-    weaken it. Tanya's review guards against that.
-12. **Move `actions/checkout` from v4 to its newest major version** (2026-11-06). GitHub is retiring
-    Node.js 20, which v4 was built for. GitHub now runs v4 on Node.js 24 and shows a warning. Confirm
-    which version runs on Node.js 24 before the move. The check is required, so a broken check
-    blocks every merge into `main`. The change is one line in
-    `.github/workflows/claude-md-check.yml`.
-13. **The session hook names files again after `main` is merged into a branch** that has not changed
+12. **Routes the privacy check cannot see** (2026-11-08). The browser test catches ordinary web
+    traffic to another site and links that open a connection early. Reviews showed it misses:
+    - WebRTC, which can reach a server directly
+    - background sync, in a full browser
+    - a link inside a shadow root
+    - anything that happens after a tap on Print, or later than the test waits
+    - speculation rules, which Chromium skips while the stand-in is set
+    - a link that opens a connection early, in a blank window the app opens itself
+
+    Code review covers these. Tanya to decide whether CI should block all outside traffic as well.
+13. **Limits of the pull request checks** (2026-11-06). The CLAUDE.md check sees at most 3,000
+    changed files, and deleting `CLAUDE.md` counts as changing it. A pull request runs its own copy
+    of each check and could weaken it. Tanya's review guards against that. Two pull requests that
+    each move `VERSION` to the same new value can both pass, and the second then ships without a
+    new one. The ruleset's "up to date" setting stops that once it is read back as on and the
+    VERSION check is required.
+14. **Browser test follow-ups** (2026-11-08), from its reviews:
+    - keep the screenshots and PDFs from a failed run in CI, so the failure can be seen
+    - measure text that runs past its own box. Today the fixed bar widening with the page shows it.
+    - page 1 of the printed worksheet has about 38 px (10 mm) to spare on Letter in Spanish and
+    French, measured by adding space before page 2 until a third page printed
+    - the print check reads the page, not the PDF. Reviews found these ways past it, and there are
+    likely more:
+      - text drawn too small to read, or squeezed flat
+      - a filter or a cover that hides the whole worksheet
+      - text added by styles
+      - text added inside the worksheet
+      - text in a form field or a frame
+      - text in a shadow root
+      - a picture set as a background
+      - a picture in an element other than `img` or `svg`, such as a canvas
+      - text placed straight in the page's body
+      - text that spills out of a box with no height
+      - tick boxes or writing spaces with no border
+      - text clipped or moved off the page
+      - text the same color as the paper
+    - the PDF can differ from the page the test read. Making it fires the print event a second
+    time, and a change made a moment after the test reads the page prints too.
+    - comparing a picture of each printed page with a saved one would catch most of the print
+    gaps above. Tanya to decide.
+    - when a tap is blocked or a page never answers, the test stops before the later checks
+    report. It still fails.
+    - against a server that sends cache headers, such as the live site, the offline checks can pass
+    with offline code that saves the files but answers no requests. The test's own server sends
+    no cache headers, so it catches that.
+    - the VERSION check counts two files the app does not load:
+    `know-your-loan/assets/icon-maskable.svg` and `know-your-loan/.gitignore`
+15. **The session hook names files again after `main` is merged into a branch** that has not changed
     `CLAUDE.md` yet (2026-11-06). It is one extra reminder.
-14. **A file name that is not valid UTF-8 reaches the hook's reminder as it is** (2026-11-06). A
-    strict JSON reader would reject it.
-15. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
+16. **Delete the branch `claude/dazzling-knuth-cfj37t`** once its last pull request merges
     (2026-11-06). Tanya said yes on 2026-11-06.
-16. **The pull request check's tests miss one kind of broken check** (2026-11-06). A copy that only
-    expands the middle line of a description passes them, because that line holds no `$(...)`. Put
-    a `$(...)` on every line of the test's commands. The real check only passes the description to
-    `grep`, so nothing is wrong today.
